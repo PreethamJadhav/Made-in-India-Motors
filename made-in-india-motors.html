@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A showcase of cars and motorcycles made in India — Tata, Mahindra, Maruti Suzuki, Hero, Bajaj, TVS, Royal Enfield and more, with full model line-ups, specs, and variants.">
+<title>Made in India | Cars & Bikes That Built a Nation</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#14171c; --asphalt:#1c2128; --panel:#20262e; --paper:#f3f1ec;
+    --racing-red:#c0392b; --chrome:#aab4bd; --gold:#c9a227; --muted:#7e8791; --white:#f5f6f7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--charcoal);color:var(--white);font-family:'Inter',sans-serif;line-height:1.5;}
+  h1,h2,h3,.display{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:0.03em;margin:0;}
+  a{color:inherit;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(20,23,28,0.9);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;}
+  .brandmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.05em;}
+  .brandmark span{color:var(--racing-red);}
+  .navlinks{display:flex;gap:32px;font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;}
+  .navlinks a{opacity:0.75;transition:opacity .2s;text-decoration:none;}
+  .navlinks a:hover{opacity:1;}
+
+  .hero{position:relative;padding:100px 0 70px;
+    background:radial-gradient(ellipse at 20% -10%, rgba(192,57,43,0.25), transparent 55%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 60px),
+      var(--charcoal);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .eyebrow{color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:16px;}
+  .hero h1{font-size:52px;line-height:1.05;max-width:780px;}
+  .hero h1 em{font-style:normal;color:var(--racing-red);}
+  .hero p{max-width:560px;color:var(--chrome);font-size:16px;margin-top:18px;}
+  .disclaimer{margin-top:20px;font-size:12px;color:var(--muted);border-left:2px solid var(--gold);padding-left:12px;max-width:520px;}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(255,255,255,0.08);background:var(--asphalt);}
+  .stat{padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:'Oswald',sans-serif;font-variant-numeric:tabular-nums;font-size:32px;font-weight:600;}
+  .stat .label{font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+
+  .section{padding:70px 0;}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:20px;}
+  .section-head h2{font-size:32px;}
+  .section-head .tag{color:var(--muted);font-size:13.5px;max-width:360px;text-align:right;}
+
+  .toggle{display:inline-flex;background:var(--asphalt);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:4px;margin-bottom:32px;}
+  .toggle button{border:none;background:transparent;color:var(--muted);padding:10px 26px;border-radius:999px;font-family:'Oswald',sans-serif;font-size:13.5px;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:all .2s ease;}
+  .toggle button.active{background:var(--racing-red);color:var(--white);}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .panel{display:none;}
+  .panel.active{display:grid;}
+
+  .card{background:var(--panel);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:24px;position:relative;overflow:hidden;transition:transform .25s ease, border-color .25s ease;display:flex;flex-direction:column;}
+  .card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.25);}
+  .card::before{content:"";position:absolute;top:0;left:0;height:3px;width:100%;background:linear-gradient(90deg,var(--racing-red),var(--gold));opacity:0;transition:opacity .25s ease;}
+  .card:hover::before{opacity:1;}
+
+  .lettermark{width:48px;height:48px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-weight:700;font-size:17px;color:var(--charcoal);margin-bottom:16px;}
+  .card h3{font-size:20px;margin-bottom:4px;}
+  .meta{display:flex;gap:14px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
+  .card p.desc{color:var(--chrome);font-size:13.5px;margin-bottom:16px;flex:1;}
+  .view-models-btn{align-self:flex-start;background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--white);padding:10px 20px;border-radius:4px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:border-color .2s ease, background .2s ease;}
+  .view-models-btn:hover{border-color:var(--racing-red);background:rgba(192,57,43,0.1);}
+  .model-count{color:var(--gold);font-size:11.5px;margin-bottom:12px;font-weight:600;letter-spacing:0.04em;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,12,15,0.75);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;padding:24px;}
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .modal{background:var(--asphalt);border:1px solid rgba(255,255,255,0.12);border-radius:8px;max-width:900px;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s ease;}
+  .modal-overlay.open .modal{transform:translateY(0);}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:24px 30px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:var(--asphalt);z-index:2;}
+  .modal-head h3{font-size:22px;}
+  .modal-head .sub{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;}
+  .modal-close{background:none;border:none;color:var(--white);font-size:26px;cursor:pointer;line-height:1;}
+  .modal-body{padding:8px 30px 30px;}
+
+  .model-row{display:flex;gap:18px;align-items:center;padding:16px 12px;border-bottom:1px solid rgba(255,255,255,0.07);cursor:pointer;border-radius:6px;transition:background .15s ease;}
+  .model-row:hover{background:rgba(255,255,255,0.04);}
+  .model-row:last-child{border-bottom:none;}
+  .model-icon{width:68px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border-radius:6px;}
+  .model-icon svg{width:46px;height:auto;}
+  .model-info{flex:1;min-width:0;}
+  .model-info h4{font-size:16px;margin-bottom:4px;font-family:'Oswald',sans-serif;text-transform:none;letter-spacing:0;}
+  .spec-row{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;color:var(--chrome);}
+  .spec-row span b{color:var(--white);font-weight:600;}
+  .model-price{font-family:'Oswald',sans-serif;color:var(--gold);font-size:16px;white-space:nowrap;text-align:right;min-width:120px;}
+  .model-price .from{display:block;font-size:10px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0.05em;}
+  .chevron{color:var(--muted);font-size:18px;margin-left:4px;}
+
+  .price-note{margin-top:16px;font-size:11px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;}
+
+  .back-btn{background:none;border:none;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;padding:0;margin-bottom:18px;display:inline-flex;align-items:center;gap:6px;}
+  .back-btn:hover{text-decoration:underline;}
+
+  .detail-photo{width:100%;height:280px;border-radius:8px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.15);}
+  .detail-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .no-photo-msg{color:var(--muted);font-size:13px;text-align:center;padding:0 20px;}
+  .no-photo-msg .icon{font-size:32px;display:block;margin-bottom:10px;}
+
+  .detail-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:22px;}
+  .detail-header h2{font-size:30px;}
+  .detail-header .brandline{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-top:6px;}
+  .detail-price{font-family:'Oswald',sans-serif;color:var(--gold);font-size:26px;text-align:right;}
+  .detail-price .from{display:block;font-size:11px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0.05em;}
+
+  .spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+  .spec-box{background:var(--panel);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:16px;}
+  .spec-box .label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:6px;}
+  .spec-box .value{font-family:'Oswald',sans-serif;font-size:16px;}
+
+  .variants-title{font-size:15px;text-transform:uppercase;letter-spacing:0.05em;color:var(--chrome);margin-bottom:14px;}
+  .variant-list{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+  .variant-chip{padding:8px 16px;border:1px solid rgba(255,255,255,0.18);border-radius:999px;font-size:12.5px;background:rgba(255,255,255,0.03);}
+
+  .heritage{background:var(--paper);color:var(--charcoal);padding:66px 0;}
+  .heritage h2{color:var(--charcoal);font-size:30px;margin-bottom:10px;}
+  .heritage p.lead{color:#5b6570;max-width:600px;margin-bottom:40px;font-size:15px;}
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .tl-item{border-left:3px solid var(--racing-red);padding-left:16px;}
+  .tl-year{font-family:'Oswald',sans-serif;font-size:23px;font-weight:600;}
+  .tl-item p{font-size:13px;color:#5b6570;margin:6px 0 0;}
+
+  .cta-band{background:var(--racing-red);padding:56px 0;text-align:center;}
+  .cta-band h2{font-size:28px;margin-bottom:16px;}
+  .cta-band p{color:rgba(255,255,255,0.85);max-width:480px;margin:0 auto 24px;}
+  .btn-ghost{display:inline-block;padding:12px 26px;font-weight:600;font-size:13.5px;letter-spacing:0.04em;text-transform:uppercase;border-radius:2px;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,0.3);color:var(--white);transition:all .2s ease;}
+  .btn-ghost:hover{border-color:var(--white);transform:translateY(-2px);}
+
+  footer{background:var(--asphalt);padding:30px 0;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+
+  @media (max-width:900px){
+    .hero h1{font-size:32px;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .grid{grid-template-columns:1fr;}
+    .timeline{grid-template-columns:1fr;}
+    .section-head{flex-direction:column;align-items:flex-start;gap:12px;}
+    .section-head .tag{text-align:left;}
+    .model-row{flex-wrap:wrap;}
+    .model-price{text-align:left;min-width:0;}
+    .spec-grid{grid-template-columns:1fr 1fr;}
+    .detail-price{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brandmark">MADE<span>IN</span>INDIA MOTORS</div>
+    <div class="navlinks">
+      <a href="#brands">Brands</a>
+      <a href="#heritage">Heritage</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">A tribute to indian engineering</div>
+    <h1>Built on Indian roads.<br><em>Driven</em> by Indian brands.</h1>
+    <p>Explore every model line-up from India's car and motorcycle manufacturers — click any model for full specs, variant options, and pricing.</p>
+    <div class="disclaimer">Specifications and prices shown are indicative, based on commonly known figures, and vary by variant, city, and time. Always confirm exact details on the manufacturer's official site before making a decision.</div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="num" id="statCarBrands">0</div><div class="label">Car Manufacturers</div></div>
+  <div class="stat"><div class="num" id="statBikeBrands">0</div><div class="label">Bike Manufacturers</div></div>
+  <div class="stat"><div class="num" id="statModels">0</div><div class="label">Models Featured</div></div>
+  <div class="stat"><div class="num">120+</div><div class="label">Years of Combined Heritage</div></div>
+</div>
+
+<section class="section" id="brands">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The Brands</h2>
+      <p class="tag">Click a brand, then click any model to see its full spec sheet.</p>
+    </div>
+
+    <div class="toggle" id="typeToggle">
+      <button class="active" data-target="cars">Cars</button>
+      <button data-target="bikes">Bikes</button>
+    </div>
+
+    <div class="grid panel active" id="carsGrid"></div>
+    <div class="grid panel" id="bikesGrid"></div>
+  </div>
+</section>
+
+<section class="heritage" id="heritage">
+  <div class="wrap">
+    <h2>A Century in the Making</h2>
+    <p class="lead">Indian mobility didn't start with SUVs and sport bikes — it was decades in the making.</p>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">1901</div><p>Royal Enfield begins motorcycle production in England — its India legacy would follow decades later.</p></div>
+      <div class="tl-item"><div class="tl-year">1945</div><p>Tata, Mahindra, and Bajaj all lay their founding roots in the same post-war year.</p></div>
+      <div class="tl-item"><div class="tl-year">1955</div><p>Royal Enfield begins Indian production in Chennai — a partnership that would outlive the UK parent.</p></div>
+      <div class="tl-item"><div class="tl-year">1983</div><p>Maruti Udyog rolls out its first car, changing what "affordable" meant for Indian households.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="wrap">
+    <h2>Got a favorite brand we should feature?</h2>
+    <p>This project is built and maintained by Preetham Jadhav as part of a full-stack development portfolio.</p>
+    <a href="https://github.com/PreethamJadhav" class="btn-ghost">View on GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;">
+    <span>&copy; 2026 Made in India Motors — a student portfolio project.</span>
+    <span>Built with HTML, CSS &amp; JavaScript</span>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3 id="modalTitle">Brand</h3>
+        <div class="sub" id="modalSub">Full model line-up</div>
+      </div>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  /* =========================================================
+     HOW TO ADD YOUR OWN PHOTOS
+     Each model object below has an "image" field, currently
+     set to an empty string "". Paste your image URL between
+     the quotes, e.g.  image: "https://example.com/nexon.jpg"
+     and it will automatically appear on that model's detail
+     page. Leave it blank and a placeholder box shows instead.
+     ========================================================= */
+
+  const icons = {
+    hatchback: `<svg viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 22 L10 13 Q12 9 17 9 L38 9 Q42 9 44 13 L50 22" stroke="currentColor" stroke-width="2"/><rect x="4" y="20" width="56" height="7" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="27" r="4" stroke="currentColor" stroke-width="2"/><circle cx="45" cy="27" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
+    suv: `<svg viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 22 L7 11 Q9 7 14 7 L46 7 Q51 7 53 11 L58 22" stroke="currentColor" stroke-width="2"/><rect x="2" y="20" width="60" height="8" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="28" r="4.5" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="28" r="4.5" stroke="currentColor" stroke-width="2"/></svg>`,
+    sedan: `<svg viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 21 L9 12 Q11 8 16 8 L26 8 L30 4 L40 4 L42 8 L47 8 Q51 8 53 12 L58 21" stroke="currentColor" stroke-width="2"/><rect x="3" y="19" width="58" height="7" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="26" r="4" stroke="currentColor" stroke-width="2"/><circle cx="47" cy="26" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
+    pickup: `<svg viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 22 L7 12 Q9 8 14 8 L28 8 Q31 8 31 11 L31 20" stroke="currentColor" stroke-width="2"/><path d="M31 12 L60 12 L60 22 L31 22" stroke="currentColor" stroke-width="2"/><rect x="2" y="20" width="60" height="7" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="27" r="4" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="27" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
+    mpv: `<svg viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 21 L8 10 Q10 7 15 7 L46 7 Q51 7 53 10 L57 21" stroke="currentColor" stroke-width="2"/><rect x="3" y="19" width="58" height="8" rx="2" stroke="currentColor" stroke-width="2"/><line x1="23" y1="9" x2="21" y2="19" stroke="currentColor" stroke-width="1.5"/><line x1="41" y1="9" x2="43" y2="19" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="27" r="4" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="27" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
+    cruiser: `<svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="30" r="8" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="30" r="8" stroke="currentColor" stroke-width="2"/><path d="M14 30 L24 16 L38 16 L50 30 M24 16 L18 12 L30 12" stroke="currentColor" stroke-width="2"/><ellipse cx="34" cy="20" rx="8" ry="4" stroke="currentColor" stroke-width="2"/></svg>`,
+    sport: `<svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="30" r="8" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="30" r="8" stroke="currentColor" stroke-width="2"/><path d="M14 30 L22 15 Q26 10 34 12 L44 15 L50 30 M22 15 L34 12" stroke="currentColor" stroke-width="2"/></svg>`,
+    scooter: `<svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="30" r="8" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="30" r="8" stroke="currentColor" stroke-width="2"/><path d="M14 30 L20 24 L20 16 L32 16 M32 16 L44 16 Q48 16 48 20 L50 30" stroke="currentColor" stroke-width="2"/></svg>`,
+    adventure: `<svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="30" r="9" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="30" r="9" stroke="currentColor" stroke-width="2"/><path d="M14 30 L22 13 L36 13 L50 30 M22 13 L16 8 L28 8" stroke="currentColor" stroke-width="2"/></svg>`,
+    electric: `<svg viewBox="0 0 64 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="30" r="8" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="30" r="8" stroke="currentColor" stroke-width="2"/><path d="M14 30 L20 24 L20 16 L32 16 M32 16 L44 16 Q48 16 48 20 L50 30" stroke="currentColor" stroke-width="2"/><path d="M30 20 L26 26 L30 26 L27 32" stroke="currentColor" stroke-width="2"/></svg>`
+  };
+
+  const carBrands = [
+    {code:'TM', name:'Tata Motors', color:'#e8ddb5', est:'Est. 1945', hq:'Mumbai',
+     desc:"India's largest automaker by revenue — known for safety-first design and a strong push into electric mobility.",
+     models:[
+        {name:'Tiago', type:'hatchback', engine:'1.2L Petrol', trans:'Manual / AMT', mileage:'~19 km/l', price:'₹5.0 lakh', image:'images/tata-tiago.webp'},
+        {name:'Altroz', type:'hatchback', engine:'1.2L Petrol / 1.5L Diesel', trans:'Manual / DCT', mileage:'~19 km/l', price:'₹6.6 lakh', image:'images/tata-altroz.webp'},
+        {name:'Punch', type:'suv', engine:'1.2L Petrol', trans:'Manual / AMT', mileage:'~19 km/l', price:'₹6.1 lakh', image:'images/tata-punch.avif'},
+        {name:'Nexon', type:'suv', engine:'1.2L Turbo Petrol / 1.5L Diesel', trans:'Manual / AMT / DCT', mileage:'~17-24 km/l', price:'₹8.1 lakh', image:'images/tata-nexon.jpg'},
+        {name:'Nexon EV', type:'electric', engine:'Electric Motor', trans:'Automatic', mileage:'~325 km range', price:'₹12.5 lakh', image:'images/tata-nexon-ev.avif'},
+        {name:'Harrier', type:'suv', engine:'2.0L Diesel', trans:'Manual / Automatic', mileage:'~16 km/l', price:'₹15.5 lakh', image:'images/tata-harrier.webp'},
+        {name:'Safari', type:'suv', engine:'2.0L Diesel', trans:'Manual / Automatic', mileage:'~16 km/l', price:'₹16.2 lakh', image:'images/tata-safari.webp'}
+     ]},
+    {code:'M&M', name:'Mahindra & Mahindra', color:'#d7c6a3', est:'Est. 1945', hq:'Mumbai',
+     desc:"Built its name on rugged SUVs and utility vehicles, with the Thar as a cultural icon of Indian off-roading.",
+     models:[
+        {name:'XUV300', type:'suv', engine:'1.2L Turbo Petrol / 1.5L Diesel', trans:'Manual / AMT', mileage:'~18 km/l', price:'₹8.6 lakh', image:'images/mahindra-xuv300.avif'},
+        {name:'Bolero', type:'suv', engine:'1.5L Diesel', trans:'Manual', mileage:'~17 km/l', price:'₹9.8 lakh', image:'images/mahindra-bolero.jpg'},
+        {name:'Thar', type:'suv', engine:'2.0L Turbo Petrol / 2.2L Diesel', trans:'Manual / Automatic, 4WD', mileage:'~15 km/l', price:'₹12.5 lakh', image:'images/mahindra-thar.jpg'},
+        {name:'Scorpio-N', type:'suv', engine:'2.0L Turbo Petrol / 2.2L Diesel', trans:'Manual / Automatic', mileage:'~14-17 km/l', price:'₹13.4 lakh', image:'images/mahindra-scorpio-n.png'},
+        {name:'XUV700', type:'suv', engine:'2.0L Turbo Petrol / 2.2L Diesel', trans:'Manual / Automatic', mileage:'~13-17 km/l', price:'₹14.5 lakh', image:'images/mahindra-xuv700.avif'}
+     ]},
+    {code:'MSI', name:'Maruti Suzuki', color:'#c9d6e3', est:'Est. 1981', hq:'New Delhi',
+     desc:"India's best-selling car brand for decades, prized for affordability, fuel efficiency, and an unmatched service network.",
+     models:[
+        {name:'WagonR', type:'hatchback', engine:'1.0L / 1.2L Petrol', trans:'Manual / AMT', mileage:'~24 km/l', price:'₹5.6 lakh', image:'images/maruti-wagonr.avif'},
+        {name:'Swift', type:'hatchback', engine:'1.2L Petrol', trans:'Manual / AMT', mileage:'~22 km/l', price:'₹6.5 lakh', image:'images/maruti-swift.avif'},
+        {name:'Baleno', type:'hatchback', engine:'1.2L Petrol', trans:'Manual / AMT', mileage:'~22 km/l', price:'₹6.7 lakh', image:'images/maruti-baleno.avif'},
+        {name:'Fronx', type:'suv', engine:'1.2L Petrol / 1.0L Turbo', trans:'Manual / AMT / Automatic', mileage:'~21 km/l', price:'₹7.5 lakh', image:'images/maruti-fronx.jpg'},
+        {name:'Brezza', type:'suv', engine:'1.5L Petrol', trans:'Manual / Automatic', mileage:'~19 km/l', price:'₹8.3 lakh', image:'images/maruti-brezza.jpg'},
+        {name:'Ertiga', type:'mpv', engine:'1.5L Petrol', trans:'Manual / Automatic', mileage:'~20 km/l', price:'₹8.6 lakh', image:'images/maruti-ertiga.webp'}
+     ]},
+    {code:'FM', name:'Force Motors', color:'#bcd6c4', est:'Est. 1958', hq:'Pune',
+     desc:"A quieter name in the industry, but a mainstay in rugged utility vehicles and light commercial transport.",
+     models:[
+        {name:'Trax Cruiser', type:'mpv', engine:'2.2L Diesel', trans:'Manual', mileage:'~12 km/l', price:'₹13.5 lakh', image:'images/force-trax-cruiser.avif'},
+        {name:'Gurkha', type:'suv', engine:'2.6L Diesel', trans:'Manual / Automatic, 4WD', mileage:'~11 km/l', price:'₹17.0 lakh', image:'images/force-gurkha.jpg'},
+        {name:'Traveller', type:'mpv', engine:'2.2L Diesel', trans:'Manual', mileage:'~11 km/l', price:'₹15.0 lakh', image:'images/force-traveller.jpg'}
+     ]},
+    {code:'AL', name:'Ashok Leyland', color:'#e3c9c9', est:'Est. 1948', hq:'Chennai',
+     desc:"A backbone of India's commercial transport — trucks and pickups that move the country's goods every day.",
+     models:[
+        {name:'Dost', type:'pickup', engine:'1.5L Diesel', trans:'Manual', mileage:'~14 km/l', price:'₹7.5 lakh', image:'images/ashokleyland-dost.avif'},
+        {name:'Bada Dost', type:'pickup', engine:'2.5L Diesel', trans:'Manual', mileage:'~12 km/l', price:'₹9.5 lakh', image:'images/ashokleyland-bada-dost.webp'},
+        {name:'Partner', type:'pickup', engine:'3.0L Diesel', trans:'Manual', mileage:'~10 km/l', price:'₹11.0 lakh', image:'images/ashokleyland-partner.webp'}
+     ]},
+    {code:'HM', name:'Hindustan Motors', color:'#d9d0e3', est:'Est. 1942', hq:'Kolkata',
+     desc:"Maker of the Ambassador — once the default car of Indian officials and taxis, and a design icon of a bygone era.",
+     models:[
+        {name:'Ambassador', type:'sedan', engine:'1.5L / 1.8L Petrol or Diesel', trans:'Manual', mileage:'~14 km/l', price:'Discontinued', image:'images/hm-ambassador.webp'},
+        {name:'Contessa', type:'sedan', engine:'1.8L Petrol', trans:'Manual', mileage:'~12 km/l', price:'Discontinued', image:'images/hm-contessa.jpg'}
+     ]}
+  ];
+
+  const bikeBrands = [
+    {code:'HM', name:'Hero MotoCorp', color:'#e8ddb5', est:'Est. 1984', hq:'New Delhi',
+     desc:"The world's largest two-wheeler manufacturer by volume, built on the back of India's most trusted commuter bikes.",
+     models:[
+        {name:'HF Deluxe', type:'cruiser', engine:'97cc', trans:'4-speed Manual', mileage:'~65 km/l', price:'₹68,000', image:'images/hero-hf-deluxe.jpg'},
+        {name:'Splendor+', type:'cruiser', engine:'97cc', trans:'4-speed Manual', mileage:'~65 km/l', price:'₹80,000', image:'images/hero-splendor-plus.avif'},
+        {name:'Passion Pro', type:'cruiser', engine:'110cc', trans:'4-speed Manual', mileage:'~60 km/l', price:'₹85,000', image:'images/hero-passion-pro.avif'},
+        {name:'Glamour', type:'cruiser', engine:'125cc', trans:'5-speed Manual', mileage:'~55 km/l', price:'₹95,000', image:'images/hero-glamour.png'},
+        {name:'Xtreme 160R', type:'sport', engine:'163cc', trans:'5-speed Manual', mileage:'~45 km/l', price:'₹1.35 lakh', image:'images/hero-xtreme-160r.png'}
+     ]},
+    {code:'BA', name:'Bajaj Auto', color:'#d7c6a3', est:'Est. 1945', hq:'Pune',
+     desc:"From the humble scooter to performance-tuned Pulsars, Bajaj shaped how a generation of Indians first rode two wheels.",
+     models:[
+        {name:'CT100', type:'cruiser', engine:'99cc', trans:'4-speed Manual', mileage:'~70 km/l', price:'₹58,000', image:'images/bajaj-ct100.jpg'},
+        {name:'Platina 100', type:'cruiser', engine:'102cc', trans:'4-speed Manual', mileage:'~65 km/l', price:'₹65,000', image:'images/bajaj-platina-100.png'},
+        {name:'Pulsar 150', type:'sport', engine:'150cc', trans:'5-speed Manual', mileage:'~45 km/l', price:'₹1.15 lakh', image:'images/bajaj-pulsar-150.avif'},
+        {name:'Pulsar N250', type:'sport', engine:'249cc', trans:'5-speed Manual', mileage:'~35 km/l', price:'₹1.55 lakh', image:'images/bajaj-pulsar-n250.avif'},
+        {name:'Avenger 220', type:'cruiser', engine:'220cc', trans:'5-speed Manual', mileage:'~35 km/l', price:'₹1.4 lakh', image:'images/bajaj-avenger-220.jpg'},
+        {name:'Dominar 400', type:'cruiser', engine:'373cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.45 lakh', image:'images/bajaj-dominar-400.webp'},
+        {name:'Chetak', type:'electric', engine:'Electric Motor', trans:'Automatic', mileage:'~90-125 km range', price:'₹1.15 lakh', image:'images/bajaj-chetak.jpg'}
+     ]},
+    {code:'TVS', name:'TVS Motor', color:'#c9d6e3', est:'Est. 1978', hq:'Chennai',
+     desc:"Known for sporty commuters and scooters, with a strong racing pedigree feeding into its performance line-up.",
+     models:[
+        {name:'Jupiter 125', type:'scooter', engine:'125cc', trans:'Automatic', mileage:'~50 km/l', price:'₹90,000', image:'images/tvs-jupiter-125.avif'},
+        {name:'Ntorq 125', type:'scooter', engine:'125cc', trans:'Automatic', mileage:'~45 km/l', price:'₹95,000', image:'images/tvs-ntorq-125.jpg'},
+        {name:'Raider 125', type:'sport', engine:'125cc', trans:'5-speed Manual', mileage:'~50 km/l', price:'₹1.0 lakh', image:'images/tvs-raider-125.webp'},
+        {name:'Apache RTR 160', type:'sport', engine:'160cc', trans:'5-speed Manual', mileage:'~45 km/l', price:'₹1.25 lakh', image:'images/tvs-apache-rtr-160.jpg'},
+        {name:'Apache RR 310', type:'sport', engine:'312cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.8 lakh', image:'images/tvs-apache-rr-310.avif'},
+        {name:'iQube', type:'electric', engine:'Electric Motor', trans:'Automatic', mileage:'~100-145 km range', price:'₹1.2 lakh', image:'images/tvs-iqube.jpg'}
+     ]},
+    {code:'RE', name:'Royal Enfield', color:'#bcd6c4', est:'India ops since 1955', hq:'Chennai',
+     desc:"The world's oldest motorcycle brand in continuous production — the thump of a Bullet is practically a national sound.",
+     models:[
+        {name:'Hunter 350', type:'sport', engine:'349cc', trans:'5-speed Manual', mileage:'~36 km/l', price:'₹1.5 lakh', image:'images/re-hunter-350.jpg'},
+        {name:'Classic 350', type:'cruiser', engine:'349cc', trans:'5-speed Manual', mileage:'~35 km/l', price:'₹1.95 lakh', image:'images/re-classic-350.avif'},
+        {name:'Bullet 350', type:'cruiser', engine:'349cc', trans:'5-speed Manual', mileage:'~35 km/l', price:'₹1.85 lakh', image:'images/re-bullet-350.jpg'},
+        {name:'Meteor 350', type:'cruiser', engine:'349cc', trans:'5-speed Manual', mileage:'~35 km/l', price:'₹2.1 lakh', image:'images/re-meteor-350.avif'},
+        {name:'Himalayan', type:'adventure', engine:'452cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.9 lakh', image:'images/re-himalayan.webp'}
+     ]},
+    {code:'JW', name:'Jawa', color:'#e3c9c9', est:'Revived 2018', hq:'Pune',
+     desc:"A cult classic name from the '60s and '70s, brought back to life with retro styling and modern engineering.",
+     models:[
+        {name:'Jawa 42', type:'cruiser', engine:'293cc', trans:'6-speed Manual', mileage:'~35 km/l', price:'₹2.1 lakh', image:'images/jawa-42.webp'},
+        {name:'Jawa 350', type:'cruiser', engine:'334cc', trans:'6-speed Manual', mileage:'~32 km/l', price:'₹2.15 lakh', image:'images/jawa-350.jpg'},
+        {name:'Perak', type:'cruiser', engine:'334cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.2 lakh', image:'images/jawa-perak.webp'}
+     ]},
+    {code:'YZ', name:'Yezdi', color:'#d9d0e3', est:'Revived 2022', hq:'Pune',
+     desc:"Sister brand to Jawa, reviving a name once loved for its rugged reliability on Indian roads.",
+     models:[
+        {name:'Roadster', type:'cruiser', engine:'334cc', trans:'6-speed Manual', mileage:'~32 km/l', price:'₹2.0 lakh', image:'images/yezdi-roadster.jpg'},
+        {name:'Scrambler', type:'adventure', engine:'334cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.1 lakh', image:'images/yezdi-scrambler.webp'},
+        {name:'Adventure', type:'adventure', engine:'334cc', trans:'6-speed Manual', mileage:'~30 km/l', price:'₹2.15 lakh', image:'images/yezdi-adventure.jpg'}
+     ]}
+  ];
+
+  function findBrand(name){ return [...carBrands, ...bikeBrands].find(b => b.name === name); }
+
+  function splitOptions(str){
+    return str.split(/\/|,/).map(s => s.trim()).filter(Boolean);
+  }
+
+  function renderBrandCards(brands, containerId){
+    const container = document.getElementById(containerId);
+    container.innerHTML = brands.map(b => `
+      <div class="card">
+        <div class="lettermark" style="background:${b.color}">${b.code}</div>
+        <h3>${b.name}</h3>
+        <div class="meta"><span>${b.est}</span><span>${b.hq}</span></div>
+        <p class="desc">${b.desc}</p>
+        <div class="model-count">${b.models.length} models</div>
+        <button class="view-models-btn" data-brand="${b.name}">View All Models</button>
+      </div>
+    `).join('');
+    container.querySelectorAll('.view-models-btn').forEach(btn => {
+      btn.addEventListener('click', () => openModelList(btn.dataset.brand));
+    });
+  }
+
+  function openModelList(brandName){
+    const brand = findBrand(brandName);
+    if(!brand) return;
+    document.getElementById('modalTitle').textContent = brand.name;
+    document.getElementById('modalSub').textContent = `${brand.models.length} models · ${brand.hq}`;
+    document.getElementById('modalBody').innerHTML = brand.models.map((m, i) => `
+      <div class="model-row" data-brand="${brand.name}" data-index="${i}">
+        <div class="model-icon" style="color:${brand.color}">${icons[m.type] || icons.hatchback}</div>
+        <div class="model-info">
+          <h4>${m.name}</h4>
+          <div class="spec-row">
+            <span>Engine: <b>${m.engine}</b></span>
+            <span>Transmission: <b>${m.trans}</b></span>
+            <span>Mileage/Range: <b>${m.mileage}</b></span>
+          </div>
+        </div>
+        <div class="model-price">${m.price}<span class="from">Starting price</span></div>
+        <div class="chevron">›</div>
+      </div>
+    `).join('') + `<div class="price-note">Prices and specs are indicative ex-showroom figures based on commonly available information. Actual pricing varies by variant, city, and time — check the manufacturer's official site for current figures.</div>`;
+
+    document.querySelectorAll('.model-row').forEach(row => {
+      row.addEventListener('click', () => openModelDetail(row.dataset.brand, parseInt(row.dataset.index)));
+    });
+
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function openModelDetail(brandName, index){
+    const brand = findBrand(brandName);
+    const m = brand.models[index];
+
+    document.getElementById('modalTitle').textContent = m.name;
+    document.getElementById('modalSub').textContent = `${brand.name} · ${m.type.charAt(0).toUpperCase() + m.type.slice(1)}`;
+
+    const engineOptions = splitOptions(m.engine);
+    const transOptions = splitOptions(m.trans);
+
+    const photoBlock = m.image
+      ? `<div class="detail-photo"><img src="${m.image}" alt="${m.name}"></div>`
+      : `<div class="detail-photo"><div class="no-photo-msg"><span class="icon">📷</span>Photo not added yet — paste an image URL into this model's "image" field in the code.</div></div>`;
+
+    document.getElementById('modalBody').innerHTML = `
+      <button class="back-btn" id="backToList">← Back to ${brand.name} models</button>
+      ${photoBlock}
+      <div class="detail-header">
+        <div>
+          <h2>${m.name}</h2>
+          <div class="brandline">${brand.name} &middot; ${brand.hq}</div>
+        </div>
+        <div class="detail-price">${m.price}<span class="from">Starting price (ex-showroom)</span></div>
+      </div>
+
+      <div class="spec-grid">
+        <div class="spec-box"><div class="label">Engine / Motor</div><div class="value">${m.engine}</div></div>
+        <div class="spec-box"><div class="label">Transmission</div><div class="value">${m.trans}</div></div>
+        <div class="spec-box"><div class="label">Mileage / Range</div><div class="value">${m.mileage}</div></div>
+      </div>
+
+      <div class="variants-title">Available Variant Options</div>
+      <div class="variant-list">
+        ${engineOptions.map(e => `<div class="variant-chip">⚙ ${e}</div>`).join('')}
+        ${transOptions.map(t => `<div class="variant-chip">🔧 ${t}</div>`).join('')}
+      </div>
+
+      <div class="price-note">Variant-wise pricing (base, mid, top trims) differs by fuel/engine choice, transmission, and features, and changes over time. This page lists the engine and transmission options available for ${m.name} — for an exact, up-to-date price list by variant, check the ${brand.name} official website or an authorized dealer.</div>
+    `;
+
+    document.getElementById('backToList').addEventListener('click', () => openModelList(brandName));
+  }
+
+  document.getElementById('modalClose').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('open');
+  });
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if(e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('open');
+  });
+
+  const toggleButtons = document.querySelectorAll('#typeToggle button');
+  const panels = { cars: document.getElementById('carsGrid'), bikes: document.getElementById('bikesGrid') };
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggleButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      Object.values(panels).forEach(p => p.classList.remove('active'));
+      panels[btn.dataset.target].classList.add('active');
+    });
+  });
+
+  renderBrandCards(carBrands, 'carsGrid');
+  renderBrandCards(bikeBrands, 'bikesGrid');
+  document.getElementById('statCarBrands').textContent = carBrands.length;
+  document.getElementById('statBikeBrands').textContent = bikeBrands.length;
+  const totalModels = [...carBrands, ...bikeBrands].reduce((sum, b) => sum + b.models.length, 0);
+  document.getElementById('statModels').textContent = totalModels + '+';
+</script>
+
+</body>
+</html>
